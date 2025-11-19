@@ -11,7 +11,7 @@ def main():
         Display()
         
         # Get user choice
-        choice = input("Enter your choice (1-6): ")
+        choice = input("Enter your choice (1-7): ")
         
         # Option 1: Add priority task
         if choice == '1':
@@ -51,6 +51,10 @@ def main():
             break
         # If user wants to quit:
             # Exit programv
+        elif choice == '7':
+            task_name = input("Enter the task name to prioritize: ").strip()
+            Prioritization(main_dict, secondary_dict, task_name)
+        
         else:
             print("Invalid choice. Please try again.")
 
@@ -58,9 +62,10 @@ def main():
 #Major Functions
 
 
+
+
 def Display():
-"""Displays the menu options that the user can utilize"""
- def Display():
+    """Displays the menu options that the user can utilize"""
     print("TASK TRACKER MENU")
     print("1. Add Priority Task")
     print("2. Add Normal Task")
@@ -69,7 +74,7 @@ def Display():
     print("5. Show Reminders")
     print("6. Quit")
     print("7. Prioritize a Task")
-    pass
+     
 
 def Retrieval(task_dict, is_priority=False):
     """
@@ -176,26 +181,26 @@ def ShowTask(main_dict, secondary_dict):
         print(f"Priority: NORMAL")
         print("=" * 40)
 
-    pass
+     
     
 def Deletion(main_dict, secondary_dict):
     """Delete task by name from storage"""
-print("Delete Task")
-task_name = input("Enter the task name to delete: ").strip()
+    print("Delete Task")
+    task_name = input("Enter the task name to delete: ").strip()
 
-# Delete from priority dict
-if task_name in main _dict:
-    del main_dict [task_name]
-    print(f"✓ Task '{task_name}' deleted from HIGH PRIORITY list.")
-    return
-# Delete from normal dict
-if task_name in secondary dict:
-    del secondary_dict[task_name]
-    print(f"✓ Task '{task_name}' deleted from NORMAL list.")
-    return
-# Not Found
-print(f"✗ Task '{task_name}' not found")
-    pass
+    # Delete from priority dict
+    if task_name in main_dict:
+        del main_dict[task_name]
+        print(f"✓ Task '{task_name}' deleted from HIGH PRIORITY list.")
+        return
+    # Delete from normal dict
+    if task_name in secondary_dict:
+        del secondary_dict[task_name]
+        print(f"✓ Task '{task_name}' deleted from NORMAL list.")
+        return
+    # Not Found
+    print(f"✗ Task '{task_name}' not found")
+     
 
 
 def Reminders(main_dict:dict, secondary_dict:dict):
@@ -262,7 +267,7 @@ def Reminders(main_dict:dict, secondary_dict:dict):
                 reminder_date = today + datetime.timedelta(days=i)
 #atrftime is short for string format time, i.e. it put a time/date object into a dstring fomat so it can be displayed
                 reminder_dates.append(reminder_date.strftime('%Y-%m-%d'))            
-                print("  " + ", ".join(reminder_dates))
+            print("  " + ", ".join(reminder_dates))
         
         else:
             # Task is 7+ days away - weekly reminders
@@ -286,23 +291,20 @@ def Reminders(main_dict:dict, secondary_dict:dict):
         print("-" * 40)
     
     print()
-    pass
+     
 
 def Prioritization(main_dict, secondary_dict, task_name):#major
     """Move task from sec to main(prioritizing this task)"""
-    If task_name in secondary_dict:
+    if task_name in secondary_dict:
         task = secondary_dict.pop(task_name) # Remove from normal list
         task["priority"] = "high" # Update field
         main_dict[task_name] = task # Insert into high priority
         print(f"✓ Task '{task_name}' has been moved to HIGH PRIORITY.")
-else:
+    else:
         print(f"✗ Task '{task_name}' not found in normal tasks.")
-    pass
+     
 
-def TimeTracker(): #debating to add
-    """When task reaches to 2 weeks before due date set reminders to everyday, 
-    when task reaches day after due date, call deletion"""#could be extra overdraft(missing assignment) function made
-    pass
+
 
 
 #Helper Functions
@@ -359,3 +361,5 @@ def DeadLines(deadline_str):
         raise ValueError("Invalid date format. Please use YYYY-MM-DD (e.g., 2025-11-20)")
 
 doctest.testmod()
+if __name__ == "__main__":
+    main() #this specifically was a Sonnet 4.5 suggestion to ensure the program runs
