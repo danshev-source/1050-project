@@ -155,15 +155,28 @@ def Retrieval(task_dict, is_priority=False):
     print()
     
 def ShowTask(main_dict, secondary_dict):
-    """
-    Display all tasks (prioritized first, next secondary)
-    1. Print "HIGH PRIORITY TASKS" header
-    # 2. Loop through main_dict and display each task with formatting
-    # 3. Print "NORMAL TASKS" header  
-    # 4. Loop through secondary_dict and display each task
-    # 5. If both dicts are empty, print "No tasks to display"
-    """
+    """Display all tasks grouped by priority"""
+
+    if not main_dict and not secondary_dict:
+        print("\nNo tasks to display.")
+        return
+
+    print("\n===== HIGH PRIORITY TASKS =====")
+    for name, info in main_dict.items():
+        print(f"\nName: {name}")
+        print(f"Due: {info['due'].strftime('%Y-%m-%d')}")
+        print(f"Priority: HIGH")
+        print("=" * 40)
+
+    print("\n===== NORMAL TASKS =====")
+    for name, info in secondary_dict.items():
+        print(f"\nName: {name}")
+        print(f"Due: {info['due'].strftime('%Y-%m-%d')}")
+        print(f"Priority: NORMAL")
+        print("=" * 40)
+
     pass
+    
 def Deletion(main_dict, secondary_dict):
     """Delete task by name from storage"""
 print("Delete Task")
