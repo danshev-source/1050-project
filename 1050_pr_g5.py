@@ -59,16 +59,16 @@ def main():
 
 
 def Display():
-    """
-    Displays the menu options that the user can utilize    
-    Menu Options
-    # 1. Add Priority Task
-    # 2. Add normal task
-    # 3. View all tasks
-    # 4. Delete a task
-    # 5. Show reminders
-    # 6. Quit
-    # """
+"""Displays the menu options that the user can utilize"""
+    print("TASK TRACKER MENU")
+    print("1. Add Priority Task")
+    print("2. Add Normal Task")
+    print("3. View All Tasks")
+    print("4. Delete a Task")
+    print("5. Show Reminders")
+    print("6. Quit")
+    print("7. Prioritize a Task")
+
     pass
 def Retrieval(task_dict, is_priority=False):
     """
@@ -166,10 +166,21 @@ def ShowTask(main_dict, secondary_dict):
     pass
 def Deletion(main_dict, secondary_dict):
     """Delete task by name from storage"""
-    # 1. Ask for task_name
-# 2. If task_name in main_dict: del main_dict[task_name], print success
-# 3. elif task_name in secondary_dict: delete and print success
-# 4. Else: print "Task not found"
+print("Delete Task")
+task_name = input("Enter the task name to delete: ").strip()
+
+# Delete from priority dict
+if task_name in main _dict:
+    del main_dict [task_name]
+    print(f"✓ Task '{task_name}' deleted from HIGH PRIORITY list.")
+    return
+# Delete from normal dict
+if task_name in secondary dict:
+    del secondary_dict[task_name]
+    print(f"✓ Task '{task_name}' deleted from NORMAL list.")
+    return
+# Not Found
+print(f"✗ Task '{task_name}' not found")
     pass
 
 
@@ -264,15 +275,16 @@ def Reminders(main_dict:dict, secondary_dict:dict):
     pass
 
 def Prioritization(main_dict, secondary_dict, task_name):#major
-    """Move task from sec to main(prioritizing this task)
-# 1. If task_name in secondary_dict:
-    # - task = secondary_dict.pop(task_name)
-    # - set task[priority] = "high" (if that field exists)
-    # - main_dict[task_name] = task
-    # - Print success
-# 2. Else: print "Task not found in secondary list"
-    """
+    """Move task from sec to main(prioritizing this task)"""
+    If task_name in secondary_dict:
+        task = secondary_dict.pop(task_name) # Remove from normal list
+        task["priority"] = "high" # Update field
+        main_dict[task_name] = task # Insert into high priority
+        print(f"✓ Task '{task_name}' has been moved to HIGH PRIORITY.")
+else:
+        print(f"✗ Task '{task_name}' not found in normal tasks.")
     pass
+
 def TimeTracker(): #debating to add
     """When task reaches to 2 weeks before due date set reminders to everyday, 
     when task reaches day after due date, call deletion"""#could be extra overdraft(missing assignment) function made
