@@ -60,6 +60,7 @@ def main():
 
 def Display():
 """Displays the menu options that the user can utilize"""
+ def Display():
     print("TASK TRACKER MENU")
     print("1. Add Priority Task")
     print("2. Add Normal Task")
@@ -68,8 +69,8 @@ def Display():
     print("5. Show Reminders")
     print("6. Quit")
     print("7. Prioritize a Task")
-
     pass
+
 def Retrieval(task_dict, is_priority=False):
     """
     Get task details from user and add to dictionary
