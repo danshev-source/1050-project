@@ -75,13 +75,7 @@ def Retrieval(task_dict, is_high=False):
     Args:
         task_dict: Dictionary to store the task (either main_dict or secondary_dict)
         is_high: Boolean indicating if this is a high priority task
-    
-    Process:
-    1. Prompt user for task_name (non-empty) and deadline (string)
-    2. Convert date string to datetime.date via DeadLines (handle ValueError with retry)
-    3. Build a task dict; set field priority = "high" if is_high, else "normal"
-    4. Insert into task_dict[task_name]
-    5. Print confirmation
+
     """
     # ASSERTION: Check that function received correct parameter types
     assert isinstance(task_dict, dict), "task_dict must be a dictionary"
