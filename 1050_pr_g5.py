@@ -15,18 +15,12 @@ def main():
         
         # Option 1: Add priority task
         if choice == '1':
-            Retrieval(main_dict, is_priority=True)
-        # If user wants to add a task:
-            # 2 commands 1 for priority one for non priority
-            # Get task details from user (name, deadline, etc.)
-            # if it's priority then add to main_dict
-            # if not priority than add to secondary_dict
-                #Add helper/subordinate function named calc
-                # Calculate reminders for this task
+            Retrieval(main_dict, is_high=True)
+    
         
         # Option 2: Add normal task
         elif choice == '2':
-            Retrieval(secondary_dict, is_priority=False)
+            Retrieval(secondary_dict, is_high=False)
         
         # Option 3: View all tasks
         elif choice == '3':
@@ -35,22 +29,16 @@ def main():
         # Option 4: Delete a task
         elif choice == '4':
             Deletion(main_dict, secondary_dict)
-        # If user wants to delete a task:
-            # Ask for task name
-            # Remove from whichever dict it's in
         
         # Option 5: Show reminders
         elif choice == '5':
             Reminders(main_dict, secondary_dict)
-         # If user wants to see reminders:
-            # Show upcoming reminders (main_dict first, then secondary)
         
         # Option 6: Quit program
         elif choice == '6':
             print("Goodbye!")
             break
-        # If user wants to quit:
-            # Exit programv
+        
         elif choice == '7':
             task_name = input("Enter the task name to prioritize: ").strip()
             Prioritization(main_dict, secondary_dict, task_name)
@@ -65,7 +53,7 @@ def main():
 
 
 def Display():
-    """Displays the menu options that the user can utilize"""
+   
     print("TASK TRACKER MENU")
     print("1. Add Priority Task")
     print("2. Add Normal Task")
@@ -76,24 +64,24 @@ def Display():
     print("7. Prioritize a Task")
      
 
-def Retrieval(task_dict, is_priority=False):
+def Retrieval(task_dict, is_high=False):
     """
     Get task details from user and add to dictionary
     
     Args:
         task_dict: Dictionary to store the task (either main_dict or secondary_dict)
-        is_priority: Boolean indicating if this is a high priority task
+        is_high: Boolean indicating if this is a high priority task
     
     Process:
     1. Prompt user for task_name (non-empty) and deadline (string)
     2. Convert date string to datetime.date via DeadLines (handle ValueError with retry)
-    3. Build a task dict; set field priority = "high" if is_priority, else "normal"
+    3. Build a task dict; set field priority = "high" if is_high, else "normal"
     4. Insert into task_dict[task_name]
     5. Print confirmation
     """
     # ASSERTION: Check that function received correct parameter types
     assert isinstance(task_dict, dict), "task_dict must be a dictionary"
-    assert isinstance(is_priority, bool), "is_priority must be a boolean"
+    assert isinstance(is_high, bool), "is_high must be a boolean"
     
     print("\n--- Add New Task ---")
     
@@ -101,37 +89,32 @@ def Retrieval(task_dict, is_priority=False):
     while True:
         task_name = input("Enter task name: ").strip()
         
-        # Use IF for user input validation (not assert!)
         if task_name == '':
             print("Error: Task name can't be empty. Please try again.")
             continue
         
-        # Check if task already exists
         if task_name in task_dict:
             print(f"Error: Task '{task_name}' already exists. Please use a different name.")
             continue
         
-        # Valid task name - break out of loop
         break
     
     # Step 2: Get deadline with error handling
     while True:
-        deadline_str = input("Enter deadline (YYYY-MM-DD, e.g., 2025-11-20): ").strip()
+        date_str = input("Enter deadline (YYYY-MM-DD, e.g., 2025-11-20): ").strip()
         
         try:
-            # Convert string to date object using DeadLines function
-            deadline_date = DeadLines(deadline_str)
+           
+            due_date = DeadLines(date_str)
             
-            # ASSERTION: Verify DeadLines returned correct type
-            assert isinstance(deadline_date, datetime.date), "DeadLines must return a date object"
+            assert isinstance(due_date, datetime.date), "DeadLines must return a date object"
             
-            # Optional: Check if date is in the past
-            if deadline_date < datetime.date.today():
+            if due_date < datetime.date.today():
                 confirm = input("Warning: This date is in the past. Continue? (y/n): ").lower()
                 if confirm != 'y':
                     continue
             
-            # Valid deadline
+         
             break
             
         except ValueError as e:
@@ -139,25 +122,25 @@ def Retrieval(task_dict, is_priority=False):
             print("Please try again.")
     
     # Step 3: Build task dictionary
-    task_info = {
-        "due": deadline_date,
-        "priority": "high" if is_priority else "normal"
+    info = {
+        "due": due_date,
+        "priority": "high" if is_high else "normal"
     }
     
-    # ASSERTION: Verify task_info has all required fields
-    assert "due" in task_info, "Task must have a due date"
-    assert "priority" in task_info, "Task must have a priority level"
+
+    assert "due" in info, "Task must have a due date"
+    assert "priority" in info, "Task must have a priority level"
     
     # Step 5: Add to dictionary
-    task_dict[task_name] = task_info
+    task_dict[task_name] = info
     
-    # ASSERTION: Verify task was actually added
+ 
     assert task_name in task_dict, "Task should be in dictionary after adding"
     
     # Step 6: Print confirmation
-    priority_label = "HIGH PRIORITY" if is_priority else "NORMAL"
-    print(f"\n✓ Task '{task_name}' added successfully as {priority_label}!")
-    print(f"  Due: {deadline_date.strftime('%Y-%m-%d')}")
+    label = "HIGH PRIORITY" if is_high else "NORMAL"
+    print(f"\n✓ Task '{task_name}' added successfully as {label}!")
+    print(f"  Due: {due_date.strftime('%Y-%m-%d')}")
     print()
     
 def ShowTask(main_dict, secondary_dict):
@@ -226,22 +209,22 @@ def Reminders(main_dict:dict, secondary_dict:dict):
     # Gather all tasks from both dictionaries
     all_tasks = []
     
-    # Add high priority tasks first
-    for task_name, task_info in main_dict.items():
-        all_tasks.append((task_name, task_info, "HIGH PRIORITY"))
+  
+    for task_name, info in main_dict.items():
+        all_tasks.append((task_name, info, "HIGH PRIORITY"))
     
-    # Add normal priority tasks
-    for task_name, task_info in secondary_dict.items():
-        all_tasks.append((task_name, task_info, "NORMAL"))
+ 
+    for task_name, info in secondary_dict.items():
+        all_tasks.append((task_name, info, "NORMAL"))
     
     print("\n" + "="*50)
     print("TASK REMINDERS")
     print("="*50)
     
-    # Process each task
-    for task_name, task_info, priority in all_tasks:
+    
+    for task_name, info, priority in all_tasks:
         # Calculate days until deadline
-        due_date = task_info["due"]
+        due_date = info["due"]
         days_left = calc(today, due_date)
         
         print(f"\nTask: {task_name} ({priority})")
@@ -250,43 +233,43 @@ def Reminders(main_dict:dict, secondary_dict:dict):
         
         # Generate reminder schedule based on days left
         if days_left < 0:
-            # Task is overdue
+            
             print("Status: OVERDUE!")
             print("Reminder: Complete this task immediately!")
         
         elif days_left == 0:
-            # Task is due today
+            
             print("Status: DUE TODAY!")
             print("Reminder: Complete this task today!")
         
         elif 0 < days_left < 7:
             # Task is due within a week - daily reminders
             print("Reminder Schedule (Daily):")
-            reminder_dates = []
+            reminders= []
             for i in range(days_left + 1):
                 reminder_date = today + datetime.timedelta(days=i)
 #atrftime is short for string format time, i.e. it put a time/date object into a dstring fomat so it can be displayed
-                reminder_dates.append(reminder_date.strftime('%Y-%m-%d'))            
-            print("  " + ", ".join(reminder_dates))
+                reminders.append(reminder_date.strftime('%Y-%m-%d'))            
+            print("  " + ", ".join(reminders))
         
         else:
             # Task is 7+ days away - weekly reminders
             print("Reminder Schedule (Weekly):")
-            reminder_dates = []
+            reminders= []
             current_reminder = today
             
             # Generate reminders every 7 days until we're within a week
             while calc(current_reminder, due_date) >= 7:
-                reminder_dates.append(current_reminder.strftime('%Y-%m-%d'))
+                reminders.append(current_reminder.strftime('%Y-%m-%d'))
                 #.timedelta is to display the difference between two dates or a time span
                 current_reminder = current_reminder + datetime.timedelta(days=7)
             
             # Add daily reminders for the last week
             while current_reminder <= due_date:
-                reminder_dates.append(current_reminder.strftime('%Y-%m-%d'))
+                reminders.append(current_reminder.strftime('%Y-%m-%d'))
                 current_reminder = current_reminder + datetime.timedelta(days=1)
             
-            print("  " + ", ".join(reminder_dates))
+            print("  " + ", ".join(reminders))
         
         print("-" * 40)
     
@@ -310,7 +293,7 @@ def Prioritization(main_dict, secondary_dict, task_name):#major
 #Helper Functions
 
 
-def calc(startDate, endDate):
+def calc(start, end):
     """
     Calculates # of days between 2 dates 
 
@@ -320,10 +303,10 @@ def calc(startDate, endDate):
     0
     """
     # ASSERTIONS: Check parameter types
-    assert isinstance(startDate, datetime.date), "startDate must be a datetime.date object"
-    assert isinstance(endDate, datetime.date), "endDate must be a datetime.date object"
+    assert isinstance(start, datetime.date), "start must be a datetime.date object"
+    assert isinstance(end, datetime.date), "end must be a datetime.date object"
     
-    delta = endDate - startDate
+    delta = end - start
     
     # ASSERTION: Result should be an integer
     assert isinstance(delta.days, int), "Result must be an integer"
@@ -331,17 +314,17 @@ def calc(startDate, endDate):
     return delta.days
 
 
-def DeadLines(deadline_str):
+def DeadLines(date_str):
     """
     Convert date string to datetime.date object
     
     """
     # ASSERTION: Input must be a string
-    assert isinstance(deadline_str, str), "deadline_str must be a string"
+    assert isinstance(date_str, str), "date_str must be a string"
     
     try:
         # Split the string by '-'
-        year, month, day = deadline_str.split('-')
+        year, month, day = date_str.split('-')
         
         # Convert to integers
         year = int(year)
