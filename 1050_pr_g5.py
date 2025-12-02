@@ -1,9 +1,10 @@
 import doctest
 import datetime
+import json  
 def main():
     # Create two empty dictionaries for storage
-    main_dict = {}  # High priority tasks
-    secondary_dict = {}  # Normal priority tasks
+    main_dict, secondary_dict = load_tasks()
+    print(f"Loaded {len(main_dict)} high priority and {len(secondary_dict)} normal tasks.")
     
     # Main program loop
     while True:
@@ -36,7 +37,10 @@ def main():
         
         # Option 6: Quit program
         elif choice == '6':
+            save_tasks(main_dict, secondary_dict)
+            print("Tasks saved!")
             print("Goodbye!")
+    
             break
         
         elif choice == '7':
@@ -342,6 +346,55 @@ def DeadLines(date_str):
     except ValueError:
         # This catches invalid dates like '2025-13-40' or wrong format
         raise ValueError("Invalid date format. Please use YYYY-MM-DD (e.g., 2025-11-20)")
+    
+def save_tasks(hi_pri, norm, file="tasks.json"):
+    """Save tasks to a JSON file"""
+    data = {
+        "high_priority": {},
+        "normal": {}
+    }
+    
+    for name, info in hi_pri.items():
+        data["high_priority"][name] = {
+            "due": info["due"].strftime('%Y-%m-%d'),
+            "priority": info["priority"]
+        }
+    
+    for name, info in norm.items():
+        data["normal"][name] = {
+            "due": info["due"].strftime('%Y-%m-%d'),
+            "priority": info["priority"]
+        }
+    
+    with open(file, 'w') as f:
+        json.dump(data, f, indent=2)
+
+
+def load_tasks(file="tasks.json"):
+    """Load tasks from a JSON file"""
+    try:
+        with open(file, 'r') as f:
+            data = json.load(f)
+        
+        hi_pri = {}
+        norm = {}
+        
+        for name, info in data.get("high_priority", {}).items():
+            hi_pri[name] = {
+                "due": DeadLines(info["due"]),
+                "priority": info["priority"]
+            }
+        
+        for name, info in data.get("normal", {}).items():
+            norm[name] = {
+                "due": DeadLines(info["due"]),
+                "priority": info["priority"]
+            }
+        
+        return hi_pri, norm
+    
+    except FileNotFoundError:
+        return {}, {}
 
 doctest.testmod()
 if __name__ == "__main__":

@@ -1,0 +1,8 @@
+tasks.json
+__pycache__
+*.pyc/
+
+
+#this file makes sure that github wouldn't take any 
+#extra info with it when uploading, including the .json
+#file which would contain the tasks input into the code
