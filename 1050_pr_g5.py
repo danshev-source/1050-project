@@ -78,8 +78,8 @@ def Retrieval(task_dict, is_high=False):
 
     """
     # ASSERTION: Check that function received correct parameter types
-    assert isinstance(task_dict, dict), "task_dict must be a dictionary"
-    assert isinstance(is_high, bool), "is_high must be a boolean"
+    assert isinstance(task_dict, dict), "needs to be dicty"
+    assert isinstance(is_high, bool), "needs to be T/F"
     
     print("\n--- Add New Task ---")
     
@@ -188,10 +188,6 @@ def Reminders(main_dict:dict, secondary_dict:dict):
     """
     Display reminders for all tasks
     
-    This function shows reminder schedules for all tasks:
-    - For tasks 7+ days away: reminders every 7 days
-    - For tasks 0-6 days away: reminders every day
-    - For overdue tasks: displays "OVERDUE" message
     """
     assert type(main_dict)==dict
     assert type(secondary_dict)==dict
@@ -246,8 +242,7 @@ def Reminders(main_dict:dict, secondary_dict:dict):
             reminders= []
             for i in range(days_left + 1):
                 reminder_date = today + datetime.timedelta(days=i)
-#atrftime is short for string format time, i.e. it put a time/date object into a dstring fomat so it can be displayed
-                reminders.append(reminder_date.strftime('%Y-%m-%d'))            
+                reminders.append(reminder_date.strftime('%Y-%m-%d'))       #strtime->string format time ->displays special type as string     
             print("  " + ", ".join(reminders))
         
         else:
@@ -259,8 +254,7 @@ def Reminders(main_dict:dict, secondary_dict:dict):
             # Generate reminders every 7 days until we're within a week
             while calc(current_reminder, due_date) >= 7:
                 reminders.append(current_reminder.strftime('%Y-%m-%d'))
-                #.timedelta is to display the difference between two dates or a time span
-                current_reminder = current_reminder + datetime.timedelta(days=7)
+                current_reminder = current_reminder + datetime.timedelta(days=7) #display difference between date 1 & 2
             
             # Add daily reminders for the last week
             while current_reminder <= due_date:
@@ -391,5 +385,5 @@ def load_tasks(file="tasks.json"):
         return {}, {}
 
 doctest.testmod()
-if __name__ == "__main__":
-    main() #this specifically was a Sonnet 4.5 suggestion to ensure the program runs
+if __name__ == "__main__": #this line specifically was a Sonnet 4.5 suggestion to ensure the program runs
+    main() 
